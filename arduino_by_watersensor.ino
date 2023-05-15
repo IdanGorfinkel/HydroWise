@@ -1,51 +1,43 @@
-// int valvePin = 2;
-int ledPin = 13;
-int delayValve = 1500;
-int delayOpenValve = 500;
-bool valveOpen = false;
-int LastTime = 0;
-int reasWaterSensor = A0;
-int sensorValue;
+// pin setup
+int valvePin = 2;
+int waterSensor = 7;
+int sevsorReader = A0;
 
+// vlaues
+int sensorValue;
+int delayOpenValve = 1000;
+int delayCloseValve = 1000;
 
 void setup() {
   // put your setup code here, to run once:
   pinMode(valvePin,OUTPUT);
-  // pinMode(ledPin,OUTPUT);
+  pinMode(waterSensor,OUTPUT);
   Serial.begin(9600);
-  // digitalWrite(valvePin, LOW);
-  // digitalWrite(ledPin, LOW);
-
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-valveOpen = false;
-Serial.println(reasWaterSensor);
-if (millis()-LastTime>=delayValve){
-  sensorValue = analogRead(reasWaterSensor);
-  if (sensorValue<450){
-    valveOpen = true;
-  }
-  else{
-    valveOpen = false;
-  }
-  LastTime = millis();
-}
 
-if(valveOpen){
+// taking sensor value
+digitalWrite(waterSensor,HIGH);
+sensorValue = analogRead(sevsorReader);
+Serial.println(sensorValue);
+digitalWrite(waterSensor,LOW);
+
+
+if(sensorValue <600){
+  // water not found valve opens
   digitalWrite(valvePin,HIGH);
   delay(delayOpenValve);
-
+  // valve close after refilling
   digitalWrite(valvePin, LOW);
-  
 }
+
 else{
-  digitalWrite(valvePin,LOW);
-  digitalWrite(ledPin,LOW);
+    // water dectadet valve remain close
+digitalWrite(valvePin, LOW);
+delay(delayCloseValve); 
 }
 
 }
+
   
-
-
